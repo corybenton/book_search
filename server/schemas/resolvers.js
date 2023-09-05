@@ -1,4 +1,4 @@
-const { Book, User } = require('../models');
+const { User } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -64,3 +64,5 @@ const resolvers = {
         }
     }
 }
+
+module.exports = resolvers;

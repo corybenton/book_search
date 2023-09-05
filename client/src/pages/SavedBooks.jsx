@@ -7,9 +7,9 @@ import {
   Col
 } from 'react-bootstrap';
 
-import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
-import { removeBookId } from '../utils/localStorage';
+import { QUERY_USER } from '../utils/queries';
+import { deleteBook } from '../utils/mutations';
 
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
@@ -26,7 +26,7 @@ const SavedBooks = () => {
           return false;
         }
 
-        const response = await getMe(token);
+        const response = await QUERY_USER(token);
 
         if (!response.ok) {
           throw new Error('something went wrong!');
@@ -60,7 +60,7 @@ const SavedBooks = () => {
       const updatedUser = await response.json();
       setUserData(updatedUser);
       // upon success, remove book's id from localStorage
-      removeBookId(bookId);
+      //removeBookId(bookId);
     } catch (err) {
       console.error(err);
     }
@@ -73,7 +73,7 @@ const SavedBooks = () => {
 
   return (
     <>
-      <div fluid className="text-light bg-dark p-5">
+      <div className="text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
