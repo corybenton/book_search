@@ -4,7 +4,7 @@ require('dotenv').config();
 
 // set token secret and expiration date
 const secret = process.env.SECRET;
-const expiration = '2h';
+const expiration = '2d';
 
 module.exports = {
   // function for our authenticated routes
@@ -28,7 +28,7 @@ module.exports = {
 
     // verify token and get user data out of it
     try {
-      const { authenticatedPerson } = jwt.verify(token, secret, { maxAge: expiration });
+      const authenticatedPerson = jwt.verify(token, secret, { maxAge: expiration });
       req.user = authenticatedPerson;
     } catch (err) {
       console.log('Invalid token');

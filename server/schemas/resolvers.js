@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Book } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -11,6 +11,18 @@ const resolvers = {
             }
 
             return foundUser;
+        },
+        me: async (parent, args, context) => {
+            if (context.user) {
+                try {
+                    const foundUser = await User.findOne({ _id: context.user.data._id });
+
+                    return foundUser;
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+            throw AuthenticationError;
         },
     },
 
@@ -38,14 +50,11 @@ const resolvers = {
             return { token, user };
         },
         deleteBook: async (parent, { book }, context) => {
-            if(context.user) {
-                const delBook = await Book.findOneAndDelete({
-                    _id: book,
-                });
+            if (context.user) {
 
-                await User.findOneAndUpdate(
-                    { _id: context.user._id },
-                    { $pull: { books: book._id } }
+                const delBook = await User.findOneAndUpdate(
+                    { _id: context.user.data._id },
+                    { $pull: { savedBooks: book } }
                 );
 
                 return delBook;
@@ -53,9 +62,11 @@ const resolvers = {
             throw AuthenticationError;
         },
         saveBook: async (parent, { book }, context) => {
+            //const token = context.headers.authorization.split(' ').pop().trim();
+            //const data = authMiddleware(content.res);
             if (context.user) {
                 return User.findOneAndUpdate(
-                    { _id: context.user._id },
+                    { username: context.user.data.username },
                     { $addToSet: { savedBooks: book } },
                     { new: true, runValidators: true }
                 );
