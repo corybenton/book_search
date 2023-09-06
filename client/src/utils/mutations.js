@@ -24,36 +24,20 @@ export const CREATE_USER = gql`
     }
 `;
 
-export const saveBook = gql`
-    mutation saveBook($book: ID!) {
-        saveBook(id: $book) {
-            token
-            user{
-                _id
-                username
-                savedBooks{
-                    _id
-                    title
-                    author
-                }
-            }
+export const SAVE_BOOK = gql`
+    mutation saveBook($book: BookInput!) {
+        saveBook(book: $book) {
+            _id
         }
     }
 `;
 
-export const deleteBook = gql`
-    mutation deleteBook($book: ID!) {
-        deleteBook(id: $book) {
-            token
-            user{
-                _id
-                username
-                savedBooks{
+export const DELETE_BOOK = gql`
+    mutation deleteBook($book: BookInput!) {
+        deleteBook(book: $book) {
                     _id
-                    title
-                    author
                 }
-            }
-        }
+            
+        
     }
 `;
